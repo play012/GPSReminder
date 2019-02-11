@@ -6,15 +6,17 @@
     android:orientation="vertical"
     tools:context=".Main2Activity">
 
-    <!--com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+    <fragment
+        android:id="@+id/map"
+        class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" / -->
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/button3"
         style="@style/ButtonTheme"
         android:layout_gravity="center"
-        android:text="@string/save"/>
+        android:text="@string/save" />
 
 </LinearLayout>

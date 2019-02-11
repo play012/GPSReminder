@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         b2.setOnClickListener(new View.OnClickListener() { // Alle Positionen abrufen
             @Override
             public void onClick(View v) {
-                double latitude = 0.00000;
-                double longitude = 0.00000;
+                double latitude = 0.0;
+                double longitude = 0.0;
                 Intent int2 = new Intent(MainActivity.this, Main3Activity.class);
                 double[] columns = new double[]{latitude, longitude};
                 Cursor c = dbOpenHelper.query("gps", columns, null, null, null, null, null);
@@ -58,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                double latitude = data.getDoubleExtra("latitude", 0.00000);
-                double longitude = data.getDoubleExtra("longitude", 0.00000);
+                double latitude = data.getDoubleExtra("latitude", 0.0);
+                double longitude = data.getDoubleExtra("longitude", 0.0);
                 dbOpenHelper.insertDataset(latitude, longitude);
             }
         }

@@ -4,6 +4,7 @@
     package="com.example.stefan.gpsreminder">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,6 +25,9 @@
         <activity
             android:name=".Main3Activity"
             android:parentActivityName=".MainActivity" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAgtbLFRqjQAtHl4-H2_b3e3vldhQ8ZoSg"/>
     </application>
 
 </manifest>
