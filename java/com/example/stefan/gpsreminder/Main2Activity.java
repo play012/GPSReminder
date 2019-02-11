@@ -34,18 +34,12 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
             requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
         }
 
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new Main2Activity();
         Location location = null;
+        onLocationChanged(location);
 
         if (location == null) {
-            onLocationChanged(location);
-            lm.requestLocationUpdates(GPS_PROVIDER, 1000, 0, locationListener);
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-            Toast.makeText(Main2Activity.this, "Breitengrad: " + latitude + "\nLängengrad: " + longitude, Toast.LENGTH_SHORT).show();
+            Toast.makeText(Main2Activity.this, "Position konnte nicht abgerufen werden.", Toast.LENGTH_SHORT).show();
         } else {
-            location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             latitude = location.getLatitude();
             longitude = location.getLongitude();
             Toast.makeText(Main2Activity.this, "Breitengrad: " + latitude + "\nLängengrad: " + longitude, Toast.LENGTH_SHORT).show();
@@ -76,8 +70,7 @@ public class Main2Activity extends AppCompatActivity implements LocationListener
     @Override
     public void onLocationChanged(Location location){
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new Main2Activity();
-        lm.requestLocationUpdates(GPS_PROVIDER, 1000, 0, locationListener);
+        lm.requestLocationUpdates(GPS_PROVIDER, 0, 0, (android.location.LocationListener) this);
     }
 
     @Override
