@@ -3,4 +3,5 @@
     <string name="savePosition">Neue Position</string>
     <string name="extractPosition">Positionen abrufen</string>
     <string name="save">Speichern</string>
+    <string name="delete">Löschen</string>
 </resources>

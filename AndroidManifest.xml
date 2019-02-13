@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,18 +17,22 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Main2Activity"
+            android:name=".SaveActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".Main3Activity"
+            android:name=".ListActivity"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ShowActivity"
+            android:parentActivityName=".ListActivity" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAgtbLFRqjQAtHl4-H2_b3e3vldhQ8ZoSg"/>
+            android:value="AIzaSyAgtbLFRqjQAtHl4-H2_b3e3vldhQ8ZoSg" />
     </application>
 
 </manifest>

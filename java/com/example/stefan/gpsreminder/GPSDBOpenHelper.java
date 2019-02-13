@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class GPSDBOpenHelper extends SQLiteOpenHelper {
 
     private static GPSDBOpenHelper instance = null;
@@ -16,9 +19,9 @@ public class GPSDBOpenHelper extends SQLiteOpenHelper {
 
     private final String TABLE_NAME_GPS = "positionen";
     private final String COL_NAME_KEY = "_id";
-    private final String COL_NAME_LATITUDE = "laengengrad";
-    private final String COL_NAME_LONGITUDE = "breitengrad";
-    private final String DATETIME = "dt";
+    private final String COL_NAME_LATITUDE = "breitengrad";
+    private final String COL_NAME_LONGITUDE = "laengengrad";
+    private final String COL_NAME_DATETIME = "uhrzeit";
 
     //privater Konstruktor
     private GPSDBOpenHelper(Context context) {
@@ -43,7 +46,7 @@ public class GPSDBOpenHelper extends SQLiteOpenHelper {
                 COL_NAME_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT ," +
                 COL_NAME_LATITUDE + " REAL NOT NULL ," +
                 COL_NAME_LONGITUDE + " REAL NOT NULL," +
-                DATETIME + " DATETIME (DEFAULT (CURRENT_TIMESTAMP)))";
+                COL_NAME_DATETIME + " TEXT )";
 
         try {
             sqLiteDatabase.execSQL(command);
@@ -54,8 +57,9 @@ public class GPSDBOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        if (oldVersion == 1 && newVersion == 2) {
-            sqLiteDatabase.execSQL("DROP TABLE " + TABLE_NAME_GPS);
+        if (newVersion > oldVersion) {
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_GPS);
+            this.onCreate(sqLiteDatabase);
         }
     }
 
@@ -68,10 +72,18 @@ public class GPSDBOpenHelper extends SQLiteOpenHelper {
     public void insertDataset(double latitude, double longitude) {
         //Instanz der Datenbank holen
         SQLiteDatabase sqLiteDB = getWritableDatabase();
-
         ContentValues values = new ContentValues();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        /*
+        SQLites datetime besitzt nur begrenzte Datumsformate:
+        https://stackoverflow.com/questions/754684/how-to-insert-a-sqlite-record-with-a-datetime-set-to-now-in-android-applicatio
+         */
+        Date date =  new Date();
+
         values.put(COL_NAME_LATITUDE, latitude);
         values.put(COL_NAME_LONGITUDE, longitude);
+        values.put(COL_NAME_DATETIME, dateFormat.format(date));
 
         try {
             sqLiteDB.insertOrThrow(TABLE_NAME_GPS, null, values);
@@ -91,10 +103,10 @@ public class GPSDBOpenHelper extends SQLiteOpenHelper {
      * @param o3
      * @param o4
      */
-    public Cursor query(String gps, double[] columns, Object o, Object o1, Object o2, Object o3, Object o4) {
+    public Cursor query(String gps, String[] columns, Object o, Object o1, Object o2, Object o3, Object o4) {
         SQLiteDatabase sqLiteDB = getReadableDatabase();
         Cursor resultSetCursor = sqLiteDB.query(TABLE_NAME_GPS, null, null,
-                null, null, null, "datetime('now') DESC");
+                null, null, null, COL_NAME_DATETIME + " DESC");
         return resultSetCursor;
     }
 }
