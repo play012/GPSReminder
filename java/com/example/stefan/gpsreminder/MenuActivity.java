@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MenuActivity extends AppCompatActivity {
+    // Hauptmenü der App und Eintragen neuer Positionen in die Datenbank
     final int REQUEST_CODE = 42;
     private GPSDBOpenHelper dbOpenHelper;
 
@@ -22,7 +23,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        // GPS-Abfrage
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
         }
@@ -31,6 +32,7 @@ public class MenuActivity extends AppCompatActivity {
         Button b1 = findViewById(R.id.button);
         Button b2 = findViewById(R.id.button2);
 
+        // Speichert neue Position ab
         b1.setOnClickListener(new View.OnClickListener() { // Neue Position abspeichern
             @Override
             public void onClick(View v) {
@@ -39,6 +41,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+        // Zeigt Liste mit allen gespeicherten Positionen an
         b2.setOnClickListener(new View.OnClickListener() { // Alle Positionen abrufen
             @Override
             public void onClick(View v) {
@@ -57,6 +60,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
+                // trägt neue Position in Datenbank ein
                 double latitude = data.getDoubleExtra("latitude", 0.0);
                 double longitude = data.getDoubleExtra("longitude", 0.0);
                 dbOpenHelper.insertDataset(latitude, longitude);

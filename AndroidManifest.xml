@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.stefan.gpsreminder">
 
+    <!-- Permissionabfrage für GPS und Internet -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -14,25 +15,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+
+        <!-- MenuActivity ist der Launcher -->
+        <activity android:name=".MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Jede Activity hat eine parentActivity (außer MenuActivity, da es der Launcher ist),
+        zu der er in der oberen Appleiste zurückkehren kann -->
         <activity
             android:name=".SaveActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MenuActivity" />
         <activity
             android:name=".ListActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MenuActivity" />
         <activity
             android:name=".ShowActivity"
             android:parentActivityName=".ListActivity" />
+
+        <!-- API-Key für Google Maps API -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAgtbLFRqjQAtHl4-H2_b3e3vldhQ8ZoSg" />
     </application>
-
 </manifest>

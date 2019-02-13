@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Codeautor Stefan Friesen -->
+<!-- Hier wurde ein RelativeLayout eingesetzt, damit das Logo oben bleiben kann und die Buttons in
+ ihrem Elternelement zentriert werden können -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MenuActivity">
 
+    <!-- Logo -->
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/logo"
         android:adjustViewBounds="true" />
-    <!-- Dokumentation zum Attribut adjustViewBounds:
+    <!-- Dokumentation zum Attribut adjustViewBounds (Beibehalten des Seitenformats des Logos):
     https://developer.android.com/reference/android/widget/ImageView.html#attr_android:adjustViewBounds -->
 
+    <!-- LinearLayout zur vertikalen Anordnung der Buttons -->
     <LinearLayout
         android:id="@+id/activity_linear_layout"
         android:layout_width="wrap_content"
@@ -24,11 +28,13 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <!-- Button zur SaveActivity -->
         <Button
             android:id="@+id/button"
             style="@style/ButtonTheme"
             android:text="@string/savePosition" />
 
+        <!-- Button zur ListActivity-->
         <Button
             android:id="@+id/button2"
             style="@style/ButtonTheme"

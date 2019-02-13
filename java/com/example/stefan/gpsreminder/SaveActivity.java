@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class SaveActivity extends AppCompatActivity implements LocationListener, OnMapReadyCallback {
+    // Abfrage, Anzeige und Übergabe der aktuellen Position per GPS und Internet
     final int REQUEST_CODE = 43;
     double latitude;
     double longitude;
@@ -38,22 +39,33 @@ public class SaveActivity extends AppCompatActivity implements LocationListener,
         setContentView(R.layout.activity_save);
 
         Button neuePosition = findViewById(R.id.button3);
-
+        // erneute GPS-Abfrage wegen des LocationManagers in dieser Klasse
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
         }
 
+        //Abfrage der Position
         positionBekommen();
+        // Anzeige des Breiten- und Längengrads als Toast
         Toast toast = Toast.makeText(SaveActivity.this, "Breitengrad: " + latitude + "\nLängengrad: " + longitude, Toast.LENGTH_SHORT);
+        /*
+         Toast soll über dem Button angezeigt werden (yOffset):
+         https://developer.android.com/guide/topics/ui/notifiers/toasts
+        */
         toast.setGravity(Gravity.BOTTOM, 0, 250);
         toast.show();
 
+        /*
+         SupportMapFragment für eine vereinfachte Map-Komponente in der Activity:
+         https://developers.google.com/android/reference/com/google/android/gms/maps/SupportMapFragment
+         */
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         neuePosition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Längen- und Breitengrad über Intent zurückgeben
                 Intent result = getIntent();
                 result.putExtra("latitude", latitude);
                 result.putExtra("longitude", longitude);
@@ -65,37 +77,57 @@ public class SaveActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        // GoogleMap erzeugen
         GoogleMap gMap = googleMap;
+        // Längen- und Breitengrad in das eigene Format LatLng legen
         LatLng pos1 = new LatLng(latitude, longitude);
+        // Marker auf der GoogleMap setzen und "Aktuelle Position" benennen
         gMap.addMarker(new MarkerOptions().position(pos1).title("Aktuelle Position"));
+        // Kamera der GoogleMap auf den Marker zentrieren
         gMap.moveCamera(CameraUpdateFactory.newLatLng(pos1));
+        // GoogleMap zoomfähig einstellen
         UiSettings settings = gMap.getUiSettings();
         settings.setZoomControlsEnabled(true);
     }
 
     public Location positionBekommen(){
         try{
+            //LocationManager erzeugen
             LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+            /*
+             Location-Abfrage mit GPS_PROVIDER alleine war nicht ausreichend, der Code für beide
+             Abfragen zusammen stammt von: https://stackoverflow.com/a/18532792
+
+             Hierbei wurde die Methode public Location getLocation() teilweise übernommen und
+             angepasst
+             */
+
+            // Überprüfen der Verfügbarkeit der Provider
             boolean isNetworkEnabled = lm.isProviderEnabled(lm.NETWORK_PROVIDER);
             boolean isGPSEnabled = lm.isProviderEnabled(lm.GPS_PROVIDER);
 
+            // Abfrage der Location anhand des NETWORK_PROVIDERs
             if (isNetworkEnabled) {
                 lm.requestLocationUpdates(lm.NETWORK_PROVIDER, 0, 0, this);
                 if (lm != null) {
                     location = lm.getLastKnownLocation(lm.NETWORK_PROVIDER);
                     if (location != null) {
+                        // Zuweisen des Längen- und Breitengrads
                         latitude = location.getLatitude();
                         longitude = location.getLongitude();
                     }
                 }
             }
 
+            // Abfrage der Location anhand des GPS_PROVIDERs
             if (isGPSEnabled) {
                 if (location == null) {
                     lm.requestLocationUpdates(lm.GPS_PROVIDER, 0, 0, this);
                     if (lm != null) {
                         location = lm.getLastKnownLocation(lm.GPS_PROVIDER);
                         if (location != null) {
+                            // Zuweisen des Längen- und Breitengrads
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
                         }

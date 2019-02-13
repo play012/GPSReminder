@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Codeautor Deniel Biletic -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -6,13 +7,16 @@
     android:orientation="vertical"
     tools:context=".SaveActivity">
 
+    <!-- Anzeige des SupportMapFragments als Fragment -->
     <fragment
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
+    <!-- Layout_weight wurde hier hinzugefügt, damit das Fragment nicht den Button überschneidet -->
 
+    <!-- Button zur Übergabe der Position zurück an MenuActivity-->
     <Button
         android:id="@+id/button3"
         style="@style/ButtonTheme"
